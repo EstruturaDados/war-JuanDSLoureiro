@@ -31,7 +31,7 @@
 
 // --- Função Principal (main) ---
 // Função principal que orquestra o fluxo do jogo, chamando as outras funções em ordem.
-int main() {
+// int main() {
     // 1. Configuração Inicial (Setup):
     // - Define o locale para português.
     // - Inicializa a semente para geração de números aleatórios com base no tempo atual.
@@ -51,7 +51,67 @@ int main() {
     // 3. Limpeza:
     // - Ao final do jogo, libera a memória alocada para o mapa para evitar vazamentos de memória.
 
-    return 0;
+//     return 0;
+// }
+#include <stdio.h>
+#include <stdlib.h>
+#include<string.h>
+
+//Variaveis globais
+#define QtdTerritorios 5
+#define TamStrNome 30
+#define TamStrCor 10
+
+//struct
+struct Territorio
+{
+     char nome[TamStrNome];
+     char cor[TamStrCor];
+     int tropas;
+};
+
+//função para limpar o buffer de entrada
+void limparBufferEntrada(){
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF);
+}
+
+int main(){
+    struct Territorio Mapa[QtdTerritorios];
+
+    printf("======================================================== \n");
+    printf("Vamos cadastrar os 5 territórios iniciais do nosso mundo \n\n");
+
+    //laço de repetição entrada de dados
+    for (int i = 0; i < QtdTerritorios; i++)
+    {
+        printf("--- Cadastrando Território %d --- \n",i+1);
+        
+        printf("Nome do Território: ");
+        fgets(Mapa[i].nome,TamStrNome,stdin);
+        
+        printf("Cor do Exercito (ex Azul, Verde): ");
+        fgets(Mapa[i].cor,TamStrCor,stdin);
+        
+        printf("Numero de Tropas: ");
+        scanf("%d",&Mapa[i].tropas);
+        limparBufferEntrada();
+    }
+
+    printf("\nCadastro inicial concluido com sucesso!\n\n");
+    printf("======================================================== \n");
+    printf("    MAPA DO MUNDO - ESTADO ATUAL   \n");
+    printf("======================================================== \n\n");
+
+    //laço de repetição saida de dados
+    for (int i = 0; i < QtdTerritorios; i++)
+    {
+        printf("TERRITÓRIO %d\n", i+1);
+        printf(" - Nome: %s", Mapa[i].nome);
+        printf(" - Dominada por: Exercito %s", Mapa[i].cor);
+        printf(" - Tropas: %d\n\n", Mapa[i].tropas);
+    }
+    
 }
 
 // --- Implementação das Funções ---
