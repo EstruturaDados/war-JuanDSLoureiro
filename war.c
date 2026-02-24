@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include<string.h>
+#include <time.h>
 
 //Variaveis globais
 #define QtdTerritorios 5
@@ -31,6 +32,18 @@ void AlocarMapa(){
     for (int i = 0; i < QtdTerritorios; i++)
     {
         Mapa[i] = (struct Territorio*) malloc(sizeof(struct Territorio));
+    }
+}
+
+//função para verificar se a alocação de memória foi bem sucedida
+int CheckAlocacao(){
+    for (int i = 0; i < QtdTerritorios; i++)
+    {
+        if (Mapa[i] == NULL)
+        {
+            printf("Erro ao alocar memória para o mapa!\n");
+            return -1; //retorna -1 para indicar erro
+        }
     }
 }
 
@@ -96,8 +109,11 @@ void ShowAtualMapa(){
         if (DadoAtacante > DadoDefensor){//atacante venceu
             printf("VITORIA DO ATACANTE! O defensor perde 1 tropa.\n");
             defensor->tropas -= 1;
-            strcpy(defensor->cor, atacante->cor); //atualiza a cor do defensor para a cor do atacante
-
+            if (defensor->tropas <= 0) {//verifica se o defensor perdeu todas as tropas
+                printf("Território conquistado!\n");
+                strcpy(defensor->cor, atacante->cor); //atualiza a cor do defensor para a cor do atacante
+                defensor->tropas = 1; // pelo menos 1 tropa ocupando
+            }
         }else if (DadoAtacante < DadoDefensor){//defensor venceu
             printf("VITORIA DO DEFENSOR! O atacante perde 1 tropa.\n");
             atacante->tropas -= 1;            
@@ -139,7 +155,7 @@ void ShowAtualMapa(){
                 } else if (Mapa[defensor-1]->tropas <= 0) {
                     printf("O território defensor já foi conquistado! Escolha outro defensor.\n");
                     TerritoriosValidos = 0;
-                } else if (Mapa[atacante-1]->cor == Mapa[defensor-1]->cor) {
+                } else if (strcmp(Mapa[atacante-1]->cor, Mapa[defensor-1]->cor) == 0) {
                     printf("O território defensor já foi conquistado! Escolha outro defensor.\n");
                     TerritoriosValidos = 0;
                 } else if (atacante == defensor) {
@@ -167,6 +183,10 @@ int main(){
     
     AlocarMapa(); //aloca memória para o mapa
 
+    if(CheckAlocacao() == -1) {
+        return -1; //sair do programa em caso de erro na alocação
+    } 
+    
     ShowMenuInicial(); //exibe o menu inicial para cadastro dos territórios
 
     printf("\nCadastro inicial concluido com sucesso!\n\n");
