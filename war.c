@@ -43,6 +43,8 @@ int CheckAlocacao(){
         {
             printf("Erro ao alocar memória para o mapa!\n");
             return -1; //retorna -1 para indicar erro
+        }else{
+            return 0; //retorna 0 para indicar sucesso
         }
     }
 }
